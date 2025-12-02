@@ -73,6 +73,10 @@ textarea.code{flex:1;background:#05101a;border:none;color:var(--text);padding:16
 .CodeMirror{height:100%;border-radius:10px;font-size:14px}
 .CodeMirror-scroll{overflow:auto}
 
+/* Touch optimizations and wrapping for mobile */
+.CodeMirror-scroll{ -webkit-overflow-scrolling: touch; }
+.CodeMirror pre{ white-space: pre-wrap; word-break: break-word; }
+
 /* Preview */
 .preview-panel{flex:1;min-width:320px;border-radius:12px;padding:10px;border:1px solid rgba(255,255,255,0.03);background:linear-gradient(180deg, rgba(10,12,16,0.7), rgba(6,8,12,0.55));display:flex;flex-direction:column}
 .preview-top{display:flex;align-items:center;gap:8px}
@@ -125,6 +129,12 @@ textarea.code{flex:1;background:#05101a;border:none;color:var(--text);padding:16
   .brand-text .title{font-size:14px}
   .brand-text .subtitle{display:none}
   .CodeMirror{font-size:12px}
+
+/* make CodeMirror larger and more touch-friendly on very small screens */
+@media (max-width:420px){
+  .CodeMirror{font-size:15px}
+  .CodeMirror .CodeMirror-gutters{font-size:13px}
+}
 
   /* Make the editor panel take most of the viewport height on mobile */
   .code-panel{height:calc(100vh - 150px);min-height:320px;overflow:auto}

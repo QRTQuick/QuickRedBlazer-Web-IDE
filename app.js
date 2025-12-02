@@ -52,9 +52,20 @@ function init(){
       styleActiveLine: true,
       matchBrackets: true,
       indentUnit: 2,
-      tabSize: 2
+      tabSize: 2,
+      lineWrapping: true,            // wrap long lines on small screens
+      viewportMargin: Infinity,
+      // contenteditable input mode can be friendlier on some mobile keyboards
+      inputStyle: (typeof navigator !== 'undefined' && /Mobi|Android/i.test(navigator.userAgent)) ? 'contenteditable' : 'textarea'
     });
-    cm.setOption('viewportMargin', Infinity);
+    // increase font-size on mobile for readability and ensure wrapper sizing
+    if(typeof navigator !== 'undefined' && /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent) || window.innerWidth <= 700){
+      try{
+        const wrap = cm.getWrapperElement();
+        if(wrap) wrap.style.fontSize = '15px';
+        cm.setOption('lineNumbers', true);
+      }catch(e){/*ignore*/}
+    }
   }
 
   attachEvents();
@@ -360,10 +371,16 @@ function buildPreview(){
 
 function runPreview(){
   const html = buildPreview();
-  const blob = new Blob([html], {type:'text/html'});
-  const url = URL.createObjectURL(blob);
-  preview.src = url;
-  setTimeout(()=> URL.revokeObjectURL(url), 2000);
+  // Prefer srcdoc for compatibility on many mobile browsers; fall back to blob URL if needed
+  try{
+    preview.removeAttribute('src');
+    preview.srcdoc = html;
+  }catch(e){
+    const blob = new Blob([html], {type:'text/html'});
+    const url = URL.createObjectURL(blob);
+    preview.src = url;
+    setTimeout(()=> URL.revokeObjectURL(url), 2000);
+  }
 }
 
 function showPanel(name){
