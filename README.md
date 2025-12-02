@@ -2,6 +2,8 @@
 
 This repository contains a compact, self-contained frontend demo of a sleek, neon-themed Web IDE. It focuses on layout and visuals and runs entirely in the browser.
 
+Live demo: https://qrtquick.github.io/QuickRedBlazer-Web-IDE/
+
 Files
 
 - `index.html` — the Web IDE UI (sidebar, editor, live preview)
@@ -32,6 +34,24 @@ Recent changes
 
 - Added in-editor syntax highlighting using CodeMirror (preloaded in `index.html`). The editor falls back to a plain `textarea` if CodeMirror is not available.
 - Added `sitemap.xml` and `robots.txt` at project root — update the URLs in `sitemap.xml` to match your deployed domain before publishing.
+
+Icons (SVG)
+
+The project includes several SVG assets used for the app icon and social previews. They are in the `icons/` folder — you can preview them below or open the files directly.
+
+- `icons/qrb-logo.svg` — primary neon `QRB` logo (512×512)
+
+	<img src="icons/qrb-logo.svg" alt="QRB logo" width="160" />
+
+- `icons/icon-192.svg` — smaller app icon (192×192)
+
+	<img src="icons/icon-192.svg" alt="Icon 192" width="96" />
+
+- `icons/icon-512.svg` — large app icon (512×512)
+
+	<img src="icons/icon-512.svg" alt="Icon 512" width="160" />
+
+You can reference these icons in the manifest or elsewhere in the app. If you need PNG fallbacks, I can generate those and update the manifest accordingly.
 
 Auto-deploy with GitHub Pages
 
