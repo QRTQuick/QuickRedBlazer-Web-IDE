@@ -32,8 +32,9 @@ body{
 /* Sidebar */
 .sidebar{
   width:var(--sidebar-w);min-width:200px;max-width:360px;padding:14px;border-radius:var(--radius);
-  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-  box-shadow: var(--shadow-strong);border:1px solid rgba(255,255,255,0.03);display:flex;flex-direction:column;gap:12px;align-items:stretch
+  /* darker green-black sidebar to match neon theme */
+  background: linear-gradient(180deg, rgba(6,24,18,0.9), rgba(2,6,8,0.95));
+  box-shadow: var(--shadow-strong);border:1px solid rgba(40,220,120,0.06);display:flex;flex-direction:column;gap:12px;align-items:stretch
 }
 
 .brand{display:flex;gap:12px;align-items:center;padding:6px}
@@ -47,6 +48,9 @@ body{
 .file-item{padding:9px 10px;border-radius:8px;display:flex;align-items:center;gap:10px;cursor:pointer;color:var(--text);transition:all .12s}
 .file-item:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(2,6,12,0.45)}
 .file-item .ext{margin-left:auto;color:var(--muted);font-size:12px}
+
+/* neon-green active accent for sidebar items */
+.file-item.active{box-shadow:0 8px 30px rgba(40,220,120,0.06);border-left:3px solid rgba(40,220,120,0.9)}
 
 .sidebar-controls{display:flex;gap:8px}
 .btn{padding:8px 12px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:var(--text);cursor:pointer}
@@ -116,9 +120,10 @@ textarea.code{flex:1;background:#05101a;border:none;color:var(--text);padding:16
 }
 
 /* Hamburger dropdown styling */
-.hamburger-menu{position:absolute;right:12px;top:56px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.008));border-radius:10px;padding:10px;box-shadow:0 14px 40px rgba(2,6,12,0.6);border:1px solid rgba(255,255,255,0.03);display:flex;flex-direction:column;gap:8px;min-width:180px;z-index:250}
+.hamburger-menu{position:absolute;right:8px;top:56px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.008));border-radius:10px;padding:8px;box-shadow:0 14px 40px rgba(2,6,12,0.6);border:1px solid rgba(255,255,255,0.03);display:grid;grid-template-columns:repeat(2, minmax(80px, 1fr));gap:6px;min-width:160px;max-width:280px;z-index:250}
 .hamburger-menu.hidden{display:none}
-.hamburger-menu .h-item{display:flex;align-items:center;gap:8px;padding:8px;border-radius:8px;background:transparent;border:none;color:var(--text);cursor:pointer}
+.hamburger-menu .h-item{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:8px;border-radius:8px;background:transparent;border:none;color:var(--text);cursor:pointer;font-size:13px}
+.hamburger-menu .h-item .h-icon{font-size:18px;display:block}
 .hamburger-menu .h-item:hover{background:rgba(255,255,255,0.02)}
 
 /* Hide topbar action buttons under a certain width, leave the More button visible */

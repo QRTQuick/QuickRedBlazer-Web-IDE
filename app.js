@@ -202,24 +202,23 @@ function buildHamburgerMenu(){
   menu.innerHTML = '';
   // Define items: label and target button id (existing controls)
   const items = [
-    {label:'Run', id:'runBtnTop'},
-    {label:'Preview', id:'togglePreviewTop'},
-    {label:'Save', id:'saveProjectTop'},
-    {label:'Connect GitHub', id:'connectGit'},
-    {label:'Push', id:'pushGit'},
-    {label:'Install', id:'installBtn'},
-    {label:'Publish', id:'publishBtn'}
+    {label:'Run', id:'runBtnTop', icon:'▶'},
+    {label:'Preview', id:'togglePreviewTop', icon:'👁️'},
+    {label:'Save', id:'saveProjectTop', icon:'💾'},
+    {label:'Connect', id:'connectGit', icon:'🔗'},
+    {label:'Push', id:'pushGit', icon:'📤'},
+    {label:'Install', id:'installBtn', icon:'⬇️'},
+    {label:'Publish', id:'publishBtn', icon:'🚀'}
   ];
   items.forEach(it=>{
     const btn = document.createElement('button');
     btn.className = 'h-item';
     btn.type = 'button';
-    btn.textContent = it.label;
+    // compact tile with icon + label
+    btn.innerHTML = `<span class="h-icon">${it.icon || ''}</span><span class="h-label">${it.label}</span>`;
     btn.addEventListener('click', ()=>{
-      // trigger the existing control if present
       const target = document.getElementById(it.id);
       if(target){ target.click(); }
-      // close menu after action
       menu.classList.add('hidden');
     });
     menu.appendChild(btn);
