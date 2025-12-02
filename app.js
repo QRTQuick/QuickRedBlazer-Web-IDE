@@ -96,7 +96,24 @@ function attachEvents(){
   if(moreBtn) moreBtn.addEventListener('click', ()=>{ alert('More actions coming soon'); });
   if(connectGit) connectGit.addEventListener('click', connectGitHub);
   if(pushGit) pushGit.addEventListener('click', pushToGitHub);
-  collapseSidebar.addEventListener('click', ()=> sidebarEl.classList.toggle('collapsed'));
+  collapseSidebar.addEventListener('click', ()=>{
+    // On small screens, open sidebar as mobile overlay; on larger screens, use collapsed state
+    if(window.innerWidth <= 700){
+      sidebarEl.classList.toggle('mobile-open');
+    } else {
+      sidebarEl.classList.toggle('collapsed');
+    }
+  });
+
+  // Close mobile sidebar when tapping outside it
+  document.addEventListener('click', (e)=>{
+    if(!sidebarEl) return;
+    if(!sidebarEl.classList.contains('mobile-open')) return;
+    const path = e.composedPath ? e.composedPath() : (e.path || []);
+    if(!path.includes(sidebarEl) && !path.includes(collapseSidebar)){
+      sidebarEl.classList.remove('mobile-open');
+    }
+  });
   togglePreview.addEventListener('click', ()=> document.getElementById('previewPanel').classList.toggle('hidden'));
   openInNew.addEventListener('click', ()=> window.open(preview.src || '', '_blank'));
   document.getElementById('fileSearch').addEventListener('input', onSearch);
