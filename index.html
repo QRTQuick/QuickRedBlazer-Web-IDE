@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>QuickRedBlazer — Web IDE</title>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+  <!-- Main styles -->
+  <link rel="stylesheet" href="styles.css">
+  <!-- CodeMirror (syntax highlighting for editor) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css" integrity="sha512-EoQzGuq2y+Yx2QH2sX3cREf1o2Z2d2bP4eQq1m3cG3kGvV0uH8x/1G6oZq5k6p6v9mV6GfQ2a7J2bQ1zLk9W2g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/dracula.min.css" integrity="sha512-RcH7y9u+1c3hZz3I7s/0Zk1p8u6b4a2q9l7f0e3m6n5p4v3s2t1u0w9x8y7z6a5b4c3d2e1f0g9h8i7j6k5l4==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <div class="logo" aria-hidden>
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="1" y="1" width="22" height="22" rx="5" fill="url(#g)" />
+            <defs>
+              <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#ff3b3b" />
+                <stop offset="0.5" stop-color="#b14bff" />
+                <stop offset="1" stop-color="#28b4ff" />
+              </linearGradient>
+            </defs>
+            <text x="50%" y="58%" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" font-weight="700" fill="#031018">QR</text>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <div class="title">QuickRedBlazer</div>
+          <div class="subtitle">Neon Web IDE</div>
+        </div>
+      </div>
+
+      <div class="search">
+        <input id="fileSearch" placeholder="Search files..." />
+      </div>
+
+      <nav class="files" id="fileTree" aria-label="Files"></nav>
+
+      <div class="sidebar-controls">
+        <button class="btn ghost" id="newFile">New</button>
+        <button class="btn" id="saveProject">Save</button>
+        <button class="btn primary" id="togglePreview">Toggle Preview</button>
+      </div>
+    </aside>
+
+    <main class="editor-wrap">
+      <header class="topbar">
+        <div class="nav-left">
+          <button class="icon-btn" id="collapseSidebar" title="Toggle sidebar">☰</button>
+          <div class="brand-mini" aria-hidden>QR</div>
+        </div>
+
+        <div class="nav-center">
+          <input id="globalSearch" placeholder="Command / Search (Ctrl+K)" aria-label="Command or search" />
+        </div>
+
+        <div class="nav-right">
+          <button class="btn ghost" id="runBtnTop">Run</button>
+          <button class="btn" id="saveProjectTop">Save</button>
+          <button class="btn ghost" id="connectGit">Connect GitHub</button>
+          <button class="btn" id="pushGit">Push</button>
+          <button class="btn primary" id="publishBtn">Publish</button>
+          <button class="icon-btn" id="moreBtn" title="More">⋯</button>
+        </div>
+      </header>
+
+      <div class="editor-body">
+        <section class="code-panel">
+          <div class="file-tabs" id="fileTabs"></div>
+          <div class="editor-area">
+            <textarea id="editor" class="code" spellcheck="false" aria-label="Code editor"></textarea>
+          </div>
+        </section>
+
+        <aside class="preview-panel" id="previewPanel">
+          <div class="preview-top">
+            <div class="small">Live Preview</div>
+            <div class="preview-actions">
+              <button class="btn ghost" id="runBtn">Run</button>
+              <button class="btn ghost" id="openInNew">Open</button>
+            </div>
+          </div>
+          <iframe id="preview" class="preview-frame" sandbox="allow-scripts allow-same-origin"></iframe>
+        </aside>
+      </div>
+    </main>
+  </div>
+
+  <!-- CodeMirror scripts (loaded before app.js initializes the editor) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.js" integrity="sha512-K8Zs1vK6j3q3k5pG2b9mY8t4sD6f1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p7q8r9s0t1u2v3w4x5y6z7a8b9c==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/xml/xml.min.js" integrity="sha512-+0I3Y5vglHc8k9qQkZ3g1wVb6M2u8t1p9d4j5k6l7m8n9o0p1q2r3s4t5u6v7w8x9y0z1a2b3c4d5e6f7g8h9i==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/javascript/javascript.min.js" integrity="sha512-Ah2f3g4h5j6k7l8m9n0o1p2q3r4s5t6u7v8w9x0y1z2a3b4c5d6e7f8g9h0i1j2k3l4m5n6o7p8q9r0s1t2u==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/css/css.min.js" integrity="sha512-B2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6a7b8c9d0e1f2g3h4i5j6k7l8m9n0o1p2q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/htmlmixed/htmlmixed.min.js" integrity="sha512-c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6a7b8c9d0e1f2g3h4i5j6k7l8m9n0o1p2q3r4s==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- Mobile bottom navigation -->
+    <nav class="mobile-nav" id="mobileNav" aria-hidden="true">
+      <button class="m-btn" id="mFiles" title="Files">📁<span>Files</span></button>
+      <button class="m-btn" id="mEditor" title="Editor">📝<span>Editor</span></button>
+      <button class="m-btn" id="mPreview" title="Preview">▶️<span>Preview</span></button>
+    </nav>
+  <script src="app.js" defer></script>
+</body>
+</html>
