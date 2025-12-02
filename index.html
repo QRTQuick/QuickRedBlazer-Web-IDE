@@ -88,9 +88,42 @@
             </div>
           </div>
           <iframe id="preview" class="preview-frame" sandbox="allow-scripts allow-same-origin"></iframe>
+          <!-- Push log / status area -->
+          <div id="pushPanel" class="push-panel hidden" aria-live="polite">
+            <div class="push-header">
+              <strong>Push Log</strong>
+              <button class="icon-btn" id="closePushPanel" aria-label="Close push log">✕</button>
+            </div>
+            <div class="push-body">
+              <div id="pushProgressSummary" class="small">Ready</div>
+              <ul id="pushLog" class="push-log"></ul>
+            </div>
+          </div>
         </aside>
       </div>
     </main>
+  </div>
+
+  <!-- Accessible modal for repository input (instead of prompts) -->
+  <div id="repoModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="repoModalTitle">
+    <div class="modal-panel">
+      <h2 id="repoModalTitle">Push to GitHub</h2>
+      <form id="repoForm">
+        <label for="repoOwner">Owner</label>
+        <input id="repoOwner" name="owner" required />
+
+        <label for="repoName">Repository</label>
+        <input id="repoName" name="repo" required />
+
+        <label for="repoBranch">Branch</label>
+        <input id="repoBranch" name="branch" value="main" required />
+
+        <div class="modal-actions">
+          <button type="button" class="btn ghost" id="repoCancel">Cancel</button>
+          <button type="submit" class="btn primary">Push</button>
+        </div>
+      </form>
+    </div>
   </div>
 
   <!-- CodeMirror scripts (loaded before app.js initializes the editor) -->
@@ -105,6 +138,8 @@
       <button class="m-btn" id="mEditor" title="Editor">📝<span>Editor</span></button>
       <button class="m-btn" id="mPreview" title="Preview">▶️<span>Preview</span></button>
     </nav>
+    <!-- Floating Run button for mobile -->
+    <button id="runFab" class="fab-run" aria-label="Run">▶</button>
   <script src="app.js" defer></script>
 </body>
 </html>

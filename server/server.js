@@ -120,7 +120,8 @@ app.post('/api/github/push', async (req, res) => {
       return res.status(502).json({ error: 'Failed updating ref', detail: err });
     }
 
-    return res.json({ ok:true, commit: commitData.sha });
+    // Return per-file blob SHAs along with commit
+    return res.json({ ok:true, commit: commitData.sha, files: blobs });
   }catch(err){
     console.error(err);
     return res.status(500).json({ error: err.message });
