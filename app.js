@@ -60,6 +60,8 @@ function init(){
   attachEvents();
   openFile(Object.keys(files)[0]);
   runPreview();
+  // adjust mobile layout sizes after initialization
+  setTimeout(adjustMobileLayout, 120);
 }
 
 function attachEvents(){
@@ -125,6 +127,21 @@ function attachEvents(){
   if(mFiles) mFiles.addEventListener('click', ()=> showPanel('files'));
   if(mEditor) mEditor.addEventListener('click', ()=> showPanel('editor'));
   if(mPreview) mPreview.addEventListener('click', ()=> showPanel('preview'));
+
+  // Mobile floating Run button
+  const runFab = document.getElementById('runFab');
+  if(runFab) runFab.addEventListener('click', ()=>{
+    runPreview();
+    // if preview shown on mobile, scroll into view smoothly
+    if(window.innerWidth <= 700){
+      const previewPanel = document.getElementById('previewPanel');
+      if(previewPanel && previewPanel.style.display !== 'none') previewPanel.scrollIntoView({behavior:'smooth'});
+    }
+  });
+
+  // Refresh/adjust editor when viewport changes
+  window.addEventListener('resize', adjustMobileLayout);
+  window.addEventListener('orientationchange', ()=> setTimeout(adjustMobileLayout, 120));
 }
 
 /* -------------------------
@@ -152,31 +169,104 @@ function connectGitHub(){
 }
 
 async function pushToGitHub(){
-  // Prefer server-side push if the helper server is available
-  const serverUrl = localStorage.getItem('qrb_server_url') || 'http://localhost:4000';
-  const owner = prompt('Repository owner (GitHub username/org):', localStorage.getItem('qrb_github_owner')||'');
-  if(!owner) return;
-  const repo = prompt('Repository name:', localStorage.getItem('qrb_github_repo')||'');
-  if(!repo) return;
-  const branch = prompt('Branch to push to:', localStorage.getItem('qrb_github_branch')||'main');
-  if(!confirm(`Push ${Object.keys(files).length} files to ${owner}/${repo}@${branch} via server ${serverUrl}?`)) return;
+  // Open repo modal instead of prompt
+  openRepoModal();
+}
 
-  // Call server-side API to perform a single-commit push
+function openRepoModal(){
+  const modal = document.getElementById('repoModal');
+  const owner = localStorage.getItem('qrb_github_owner') || '';
+  const repo = localStorage.getItem('qrb_github_repo') || '';
+  const branch = localStorage.getItem('qrb_github_branch') || 'main';
+  document.getElementById('repoOwner').value = owner;
+  document.getElementById('repoName').value = repo;
+  document.getElementById('repoBranch').value = branch;
+  modal.classList.remove('hidden');
+  // focus first field
+  setTimeout(()=> document.getElementById('repoOwner').focus(), 100);
+}
+
+function closeRepoModal(){
+  document.getElementById('repoModal').classList.add('hidden');
+}
+
+// handle modal form submit
+document.addEventListener('DOMContentLoaded', ()=>{
+  const form = document.getElementById('repoForm');
+  if(form){
+    form.addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      const owner = document.getElementById('repoOwner').value.trim();
+      const repo = document.getElementById('repoName').value.trim();
+      const branch = document.getElementById('repoBranch').value.trim() || 'main';
+      if(!owner || !repo){ alert('Owner and repo are required'); return; }
+      // store defaults
+      localStorage.setItem('qrb_github_owner', owner);
+      localStorage.setItem('qrb_github_repo', repo);
+      localStorage.setItem('qrb_github_branch', branch);
+      closeRepoModal();
+      await pushViaServer(owner, repo, branch);
+    });
+    document.getElementById('repoCancel').addEventListener('click', ()=> closeRepoModal());
+    // close modal on Escape
+    document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeRepoModal(); });
+  }
+  // close push panel
+  const closePush = document.getElementById('closePushPanel');
+  if(closePush) closePush.addEventListener('click', ()=> document.getElementById('pushPanel').classList.add('hidden'));
+});
+
+async function pushViaServer(owner, repo, branch){
+  const serverUrl = localStorage.getItem('qrb_server_url') || 'http://localhost:4000';
+  const pushPanel = document.getElementById('pushPanel');
+  const pushLog = document.getElementById('pushLog');
+  const pushSummary = document.getElementById('pushProgressSummary');
+  pushLog.innerHTML = '';
+  pushPanel.classList.remove('hidden');
+  pushSummary.textContent = 'Preparing files...';
+
+  // show pending entries
+  const entries = Object.keys(files).map(p=>({path:p,status:'pending'}));
+  for(const e of entries){
+    const li = document.createElement('li'); li.className = 'pending'; li.dataset.path = e.path;
+    li.innerHTML = `<span class="fname">${e.path}</span><span class="status">Pending</span>`;
+    pushLog.appendChild(li);
+  }
+
   try{
+    pushSummary.textContent = 'Uploading (single-commit)...';
     const resp = await fetch(`${serverUrl.replace(/\/$/, '')}/api/github/push`, {
       method: 'POST', headers: {'Content-Type':'application/json'}, credentials: 'include',
       body: JSON.stringify({ owner, repo, branch, message: `QuickRedBlazer push`, files })
     });
     const data = await resp.json();
-    if(resp.ok){
-      alert('Push complete. Commit: ' + data.commit);
-    } else {
-      console.error(data);
-      alert('Push failed: ' + (data.error||JSON.stringify(data)));
+    if(!resp.ok){
+      pushSummary.textContent = 'Push failed';
+      const li = document.createElement('li'); li.className='fail'; li.textContent = 'Server error: ' + (data.error||JSON.stringify(data));
+      pushLog.appendChild(li);
+      return;
     }
+
+    // success: update per-file status using returned blobs mapping
+    pushSummary.textContent = `Push successful — commit ${data.commit}`;
+    const blobs = data.files || {};
+    for(const li of Array.from(pushLog.children)){
+      const path = li.dataset.path;
+      if(blobs[path]){
+        li.className = 'success';
+        li.querySelector('.status').textContent = 'OK ' + blobs[path].slice(0,7);
+      } else {
+        li.className = 'fail';
+        li.querySelector('.status').textContent = 'Unknown';
+      }
+    }
+    // move a small progress indicator
+    const prog = document.querySelector('.push-progress > i');
+    if(prog) prog.style.width = '100%';
   }catch(err){
-    console.error(err);
-    alert('Push failed: ' + err.message + '\nMake sure the server is running and you have connected via OAuth.');
+    pushSummary.textContent = 'Push failed: ' + err.message;
+    const li = document.createElement('li'); li.className='fail'; li.textContent = err.message;
+    pushLog.appendChild(li);
   }
 }
 
@@ -283,17 +373,19 @@ function showPanel(name){
   if(name === 'files'){
     // show sidebar, hide preview
     if(sidebar) sidebar.style.display = '';
-    if(previewPanel) previewPanel.style.display = 'none';
+    if(previewPanel) { previewPanel.style.display = 'none'; previewPanel.classList.remove('mobile-visible'); }
     if(codePanel) codePanel.style.display = '';
   } else if(name === 'editor'){
     if(sidebar) sidebar.style.display = 'none';
-    if(previewPanel) previewPanel.style.display = 'none';
+    if(previewPanel) { previewPanel.style.display = 'none'; previewPanel.classList.remove('mobile-visible'); }
     if(codePanel) codePanel.style.display = '';
   } else if(name === 'preview'){
     if(sidebar) sidebar.style.display = 'none';
     if(codePanel) codePanel.style.display = 'none';
-    if(previewPanel) previewPanel.style.display = '';
+    if(previewPanel) { previewPanel.style.display = ''; previewPanel.classList.add('mobile-visible'); }
   }
+  // refresh CodeMirror after layout changes so it resizes correctly
+  setTimeout(()=>{ if(cm && cm.refresh) cm.refresh(); }, 140);
 }
 
 // debounce run
@@ -301,6 +393,29 @@ let debounceTimer = null;
 function debounceRun(){
   if(debounceTimer) clearTimeout(debounceTimer);
   debounceTimer = setTimeout(()=> runPreview(), 600);
+}
+
+// Adjust editor/preview sizing on mobile/resize and refresh CodeMirror
+function adjustMobileLayout(){
+  const isMobile = window.innerWidth <= 700;
+  const codePanel = document.querySelector('.code-panel');
+  const previewPanel = document.getElementById('previewPanel');
+  const topbar = document.querySelector('.topbar');
+  const mobileNav = document.getElementById('mobileNav');
+  // compute available height
+  const vh = window.innerHeight;
+  let used = 0;
+  if(topbar) used += topbar.getBoundingClientRect().height || 56;
+  if(mobileNav && isMobile) used += mobileNav.getBoundingClientRect().height || 64;
+  const avail = Math.max(240, vh - used - 90);
+  if(codePanel && isMobile){ codePanel.style.height = avail + 'px'; }
+  if(previewPanel && isMobile && previewPanel.classList.contains('mobile-visible')){
+    previewPanel.style.height = (vh - used - 36) + 'px';
+  }
+  // Ensure CodeMirror refreshes (necessary when container sizes change)
+  if(cm && typeof cm.refresh === 'function'){
+    try{ cm.refresh(); }catch(e){ /* ignore */ }
+  }
 }
 
 // init on load
