@@ -106,6 +106,9 @@ textarea.code{flex:1;background:#05101a;border:none;color:var(--text);padding:16
 .nav-center{flex:1}
 .nav-center input{width:100%;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.03);background:transparent;color:var(--text)}
 .nav-right{display:flex;align-items:center;gap:8px}
+/* Install button (hidden until beforeinstallprompt fires) */
+.btn.install{display:inline-flex}
+.btn.install.hidden{display:none}
 
 /* Mobile bottom nav */
 .mobile-nav{display:none;position:fixed;left:12px;right:12px;bottom:12px;background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:14px;padding:8px 10px;justify-content:space-around;align-items:center;box-shadow:0 10px 40px rgba(2,6,12,0.6);z-index:60}
@@ -120,7 +123,8 @@ textarea.code{flex:1;background:#05101a;border:none;color:var(--text);padding:16
   .preview-panel{display:none}
   /* allow page scrolling on small screens */
   body{height:auto;overflow:auto}
-  .app{height:auto;gap:12px;padding:12px}
+  /* extra bottom padding so fixed mobile nav doesn't overlap content */
+  .app{height:auto;gap:12px;padding:12px;padding-bottom:96px}
   /* Mobile-open sidebar (overlay) */
   .sidebar.mobile-open{display:flex;position:fixed;left:12px;top:12px;bottom:96px;width:calc(100% - 24px);z-index:90;box-shadow:0 30px 80px rgba(2,6,12,0.8);border-radius:12px}
   /* Make the topbar compact */
@@ -149,7 +153,7 @@ textarea.code{flex:1;background:#05101a;border:none;color:var(--text);padding:16
   .btn, .icon-btn{padding:10px 14px;font-size:15px}
 
   /* Floating Run FAB (mobile) */
-  .fab-run{display:none;position:fixed;right:16px;bottom:78px;width:56px;height:56px;border-radius:28px;align-items:center;justify-content:center;box-shadow:0 18px 50px rgba(177,75,255,0.18);background:linear-gradient(90deg,var(--neon-red),var(--neon-purple));color:#04151a;font-weight:800;border:none;z-index:200}
+  .fab-run{display:none;position:fixed;right:16px;bottom:96px;width:56px;height:56px;border-radius:28px;align-items:center;justify-content:center;box-shadow:0 18px 50px rgba(177,75,255,0.18);background:linear-gradient(90deg,var(--neon-red),var(--neon-purple));color:#04151a;font-weight:800;border:none;z-index:200}
   .fab-run:active{transform:translateY(1px)}
   .fab-run:focus{outline:2px solid rgba(255,255,255,0.06)}
   .fab-run.inline-icon{font-size:20px}

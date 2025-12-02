@@ -109,9 +109,24 @@ function attachEvents(){
   if(moreBtn) moreBtn.addEventListener('click', ()=>{ alert('More actions coming soon'); });
   if(connectGit) connectGit.addEventListener('click', connectGitHub);
   if(pushGit) pushGit.addEventListener('click', pushToGitHub);
+  // install button for PWA (if present)
+  const installBtn = document.getElementById('installBtn');
+  if(installBtn){
+    installBtn.addEventListener('click', async ()=>{
+      if(deferredPrompt){
+        deferredPrompt.prompt();
+        const choice = await deferredPrompt.userChoice.catch(()=>({outcome:'dismissed'}));
+        if(choice && choice.outcome === 'accepted'){
+          installBtn.classList.add('hidden');
+        }
+        deferredPrompt = null;
+      }
+    });
+  }
   collapseSidebar.addEventListener('click', ()=>{
     // On small screens, open sidebar as mobile overlay; on larger screens, use collapsed state
     if(window.innerWidth <= 700){
+      // act as hamburger on mobile: toggle the sidebar overlay
       sidebarEl.classList.toggle('mobile-open');
     } else {
       sidebarEl.classList.toggle('collapsed');
@@ -153,6 +168,32 @@ function attachEvents(){
   // Refresh/adjust editor when viewport changes
   window.addEventListener('resize', adjustMobileLayout);
   window.addEventListener('orientationchange', ()=> setTimeout(adjustMobileLayout, 120));
+}
+
+// PWA: service worker registration and install prompt handling
+let deferredPrompt = null;
+window.addEventListener('beforeinstallprompt', (e)=>{
+  e.preventDefault();
+  deferredPrompt = e;
+  // show a brief automatic prompt to install after a short delay (most browsers allow prompt here)
+  setTimeout(()=>{
+    if(deferredPrompt){
+      try{ deferredPrompt.prompt(); }
+      catch(err){ /* ignore */ }
+    }
+  }, 1000);
+});
+
+window.addEventListener('appinstalled', ()=>{
+  // hide any custom install UI if present
+  const btn = document.getElementById('installBtn'); if(btn) btn.classList.add('hidden');
+});
+
+// register service worker
+if('serviceWorker' in navigator){
+  window.addEventListener('load', ()=>{
+    navigator.serviceWorker.register('/sw.js').catch(()=>{});
+  });
 }
 
 /* -------------------------

@@ -4,6 +4,55 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>QuickRedBlazer — Web IDE</title>
+  <!-- Google site verification (token only) -->
+  <meta name="google-site-verification" content="google7d8177cdda59d81f" />
+  <!-- Primary SEO meta -->
+  <meta name="description" content="QuickRedBlazer — a sleek neon-themed Web IDE by Quick Rd Tech. Edit, preview and publish web projects directly in your browser. PWA-ready with GitHub integration and live preview." />
+  <meta name="keywords" content="web ide, code editor, live preview, PWA, QuickRedBlazer, Quick Rd Tech, online IDE, CodeMirror, web development" />
+  <meta name="author" content="Quick Rd Tech" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="/" />
+
+  <!-- Open Graph / Social -->
+  <meta property="og:site_name" content="QuickRedBlazer" />
+  <meta property="og:title" content="QuickRedBlazer — Web IDE" />
+  <meta property="og:description" content="A sleek neon-themed Web IDE by Quick Rd Tech — edit, preview and publish web projects directly in your browser." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="/" />
+  <meta property="og:image" content="/icons/icon-512.svg" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="QuickRedBlazer — Web IDE" />
+  <meta name="twitter:description" content="A sleek neon-themed Web IDE by Quick Rd Tech — edit, preview and publish web projects directly in your browser." />
+  <meta name="twitter:image" content="/icons/icon-512.svg" />
+
+  <!-- Structured data: Organization and SoftwareApplication -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "name": "Quick Rd Tech",
+        "url": "/",
+        "logo": "/icons/icon-192.svg"
+      },
+      {
+        "@type": "SoftwareApplication",
+        "name": "QuickRedBlazer",
+        "operatingSystem": "Web",
+        "applicationCategory": "DeveloperTool",
+        "author": { "@type": "Organization", "name": "Quick Rd Tech" },
+        "description": "A neon-themed in-browser Web IDE for editing and previewing web projects.",
+        "url": "/",
+        "image": "/icons/icon-512.svg"
+      }
+    ]
+  }
+  </script>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#071018">
 
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
@@ -66,6 +115,7 @@
           <button class="btn" id="saveProjectTop">Save</button>
           <button class="btn ghost" id="connectGit">Connect GitHub</button>
           <button class="btn" id="pushGit">Push</button>
+          <button class="btn install hidden" id="installBtn">Install</button>
           <button class="btn primary" id="publishBtn">Publish</button>
           <button class="icon-btn" id="moreBtn" title="More">⋯</button>
         </div>
@@ -132,12 +182,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/javascript/javascript.min.js" integrity="sha512-Ah2f3g4h5j6k7l8m9n0o1p2q3r4s5t6u7v8w9x0y1z2a3b4c5d6e7f8g9h0i1j2k3l4m5n6o7p8q9r0s1t2u==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/css/css.min.js" integrity="sha512-B2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6a7b8c9d0e1f2g3h4i5j6k7l8m9n0o1p2q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/htmlmixed/htmlmixed.min.js" integrity="sha512-c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6a7b8c9d0e1f2g3h4i5j6k7l8m9n0o1p2q3r4s==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <!-- Mobile bottom navigation -->
-    <nav class="mobile-nav" id="mobileNav" aria-hidden="true">
-      <button class="m-btn" id="mFiles" title="Files">📁<span>Files</span></button>
-      <button class="m-btn" id="mEditor" title="Editor">📝<span>Editor</span></button>
-      <button class="m-btn" id="mPreview" title="Preview">▶️<span>Preview</span></button>
-    </nav>
     <!-- Floating Run button for mobile -->
     <button id="runFab" class="fab-run" aria-label="Run">▶</button>
   <script src="app.js" defer></script>
