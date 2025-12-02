@@ -106,6 +106,26 @@ textarea.code{flex:1;background:#05101a;border:none;color:var(--text);padding:16
 .nav-center{flex:1}
 .nav-center input{width:100%;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.03);background:transparent;color:var(--text)}
 .nav-right{display:flex;align-items:center;gap:8px}
+/* make nav-right responsive: wrap on narrow screens and reduce spacing */
+.nav-right{flex-wrap:wrap}
+
+@media (max-width:700px){
+  .nav-right{gap:6px}
+  .nav-right .btn{padding:6px 8px;font-size:14px}
+  .nav-center{flex:1 1 100%;margin:8px 0}
+}
+
+/* Hamburger dropdown styling */
+.hamburger-menu{position:absolute;right:12px;top:56px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.008));border-radius:10px;padding:10px;box-shadow:0 14px 40px rgba(2,6,12,0.6);border:1px solid rgba(255,255,255,0.03);display:flex;flex-direction:column;gap:8px;min-width:180px;z-index:250}
+.hamburger-menu.hidden{display:none}
+.hamburger-menu .h-item{display:flex;align-items:center;gap:8px;padding:8px;border-radius:8px;background:transparent;border:none;color:var(--text);cursor:pointer}
+.hamburger-menu .h-item:hover{background:rgba(255,255,255,0.02)}
+
+/* Hide topbar action buttons under a certain width, leave the More button visible */
+@media (max-width:700px){
+  .nav-right > button:not(#moreBtn){ display:none }
+  .nav-right{gap:4px}
+}
 /* Install button (hidden until beforeinstallprompt fires) */
 .btn.install{display:inline-flex}
 .btn.install.hidden{display:none}

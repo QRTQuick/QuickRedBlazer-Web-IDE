@@ -7,9 +7,9 @@
   <!-- Google site verification (token only) -->
   <meta name="google-site-verification" content="google7d8177cdda59d81f" />
   <!-- Primary SEO meta -->
-  <meta name="description" content="QuickRedBlazer — a sleek neon-themed Web IDE by Quick Rd Tech. Edit, preview and publish web projects directly in your browser. PWA-ready with GitHub integration and live preview." />
-  <meta name="keywords" content="web ide, code editor, live preview, PWA, QuickRedBlazer, Quick Rd Tech, online IDE, CodeMirror, web development" />
-  <meta name="author" content="Quick Rd Tech" />
+  <meta name="description" content="QuickRedBlazer — a sleek neon-themed Web IDE by Quick Red Tech. Edit, preview and publish web projects directly in your browser. PWA-ready with GitHub integration and live preview." />
+  <meta name="keywords" content="web ide, code editor, live preview, PWA, QuickRedBlazer, Quick Red Tech, online IDE, CodeMirror, web development" />
+  <meta name="author" content="Quick Red Tech" />
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="/" />
 
@@ -18,14 +18,15 @@
   <meta property="og:title" content="QuickRedBlazer — Web IDE" />
   <meta property="og:description" content="A sleek neon-themed Web IDE by Quick Rd Tech — edit, preview and publish web projects directly in your browser." />
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="/" />
-  <meta property="og:image" content="/icons/qrb-logo.svg" />
+  <link rel="canonical" href="https://qrtquick.github.io/QuickRedBlazer-Web-IDE/" />
+  <meta property="og:url" content="https://qrtquick.github.io/QuickRedBlazer-Web-IDE/" />
+  <meta property="og:image" content="https://qrtquick.github.io/QuickRedBlazer-Web-IDE/icons/qrb-logo.svg" />
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="QuickRedBlazer — Web IDE" />
   <meta name="twitter:description" content="A sleek neon-themed Web IDE by Quick Rd Tech — edit, preview and publish web projects directly in your browser." />
-  <meta name="twitter:image" content="/icons/qrb-logo.svg" />
+  <meta name="twitter:image" content="https://qrtquick.github.io/QuickRedBlazer-Web-IDE/icons/qrb-logo.svg" />
 
   <!-- Structured data: Organization and SoftwareApplication -->
   <script type="application/ld+json">
@@ -35,8 +36,8 @@
       {
         "@type": "Organization",
         "name": "Quick Rd Tech",
-        "url": "/",
-        "logo": "/icons/qrb-logo.svg"
+        "url": "https://qrtquick.github.io/QuickRedBlazer-Web-IDE/",
+        "logo": "https://qrtquick.github.io/QuickRedBlazer-Web-IDE/icons/qrb-logo.svg"
       },
       {
         "@type": "SoftwareApplication",
@@ -45,8 +46,8 @@
         "applicationCategory": "DeveloperTool",
         "author": { "@type": "Organization", "name": "Quick Rd Tech" },
         "description": "A neon-themed in-browser Web IDE for editing and previewing web projects.",
-        "url": "/",
-        "image": "/icons/qrb-logo.svg"
+        "url": "https://qrtquick.github.io/QuickRedBlazer-Web-IDE/",
+        "image": "https://qrtquick.github.io/QuickRedBlazer-Web-IDE/icons/qrb-logo.svg"
       }
     ]
   }
@@ -112,12 +113,15 @@
 
         <div class="nav-right">
           <button class="btn ghost" id="runBtnTop">Run</button>
+          <button class="btn ghost" id="togglePreviewTop">Preview</button>
           <button class="btn" id="saveProjectTop">Save</button>
           <button class="btn ghost" id="connectGit">Connect GitHub</button>
           <button class="btn" id="pushGit">Push</button>
           <button class="btn install hidden" id="installBtn">Install</button>
           <button class="btn primary" id="publishBtn">Publish</button>
           <button class="icon-btn" id="moreBtn" title="More">⋯</button>
+          <!-- Hamburger dropdown (populated on mobile) -->
+          <div id="hamburgerMenu" class="hamburger-menu hidden" role="menu" aria-hidden="true"></div>
         </div>
       </header>
 

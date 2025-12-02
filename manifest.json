@@ -1,7 +1,8 @@
 {
   "name": "QuickRedBlazer — Web IDE",
   "short_name": "QRBIDE",
-  "start_url": ".",
+  "start_url": "/QuickRedBlazer-Web-IDE/",
+  "scope": "/QuickRedBlazer-Web-IDE/",
   "display": "standalone",
   "background_color": "#071018",
   "theme_color": "#071018",

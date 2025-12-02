@@ -88,7 +88,6 @@ function attachEvents(){
   const runTop = document.getElementById('runBtnTop');
   const saveTop = document.getElementById('saveProjectTop');
   const publishBtn = document.getElementById('publishBtn');
-  const moreBtn = document.getElementById('moreBtn');
   const connectGit = document.getElementById('connectGit');
   const pushGit = document.getElementById('pushGit');
   if(runTop) runTop.addEventListener('click', runPreview);
@@ -106,7 +105,6 @@ function attachEvents(){
       alert('Run the following commands in your repo to push and trigger deploy:\n\n' + cmds);
     }
   });
-  if(moreBtn) moreBtn.addEventListener('click', ()=>{ alert('More actions coming soon'); });
   if(connectGit) connectGit.addEventListener('click', connectGitHub);
   if(pushGit) pushGit.addEventListener('click', pushToGitHub);
   // install button for PWA (if present)
@@ -154,6 +152,34 @@ function attachEvents(){
   if(mEditor) mEditor.addEventListener('click', ()=> showPanel('editor'));
   if(mPreview) mPreview.addEventListener('click', ()=> showPanel('preview'));
 
+  // topbar preview button (duplicate control)
+  const togglePreviewTop = document.getElementById('togglePreviewTop');
+  if(togglePreviewTop){
+    togglePreviewTop.addEventListener('click', togglePreviewPanel);
+  }
+
+  // Responsive hamburger menu: populate on demand when More button clicked
+  const moreBtn = document.getElementById('moreBtn');
+  const hamburgerMenu = document.getElementById('hamburgerMenu');
+  if(moreBtn && hamburgerMenu){
+    moreBtn.addEventListener('click', (e)=>{
+      e.stopPropagation();
+      // toggle
+      const open = hamburgerMenu.classList.toggle('hidden') === false;
+      if(open){ buildHamburgerMenu(); }
+    });
+
+    // close on outside click
+    document.addEventListener('click', (e)=>{
+      const path = e.composedPath ? e.composedPath() : (e.path || []);
+      if(!path.includes(hamburgerMenu) && !path.includes(moreBtn)){
+        hamburgerMenu.classList.add('hidden');
+      }
+    });
+    // close on Escape
+    document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') hamburgerMenu.classList.add('hidden'); });
+  }
+
   // Mobile floating Run button
   const runFab = document.getElementById('runFab');
   if(runFab) runFab.addEventListener('click', ()=>{
@@ -168,6 +194,55 @@ function attachEvents(){
   // Refresh/adjust editor when viewport changes
   window.addEventListener('resize', adjustMobileLayout);
   window.addEventListener('orientationchange', ()=> setTimeout(adjustMobileLayout, 120));
+}
+
+function buildHamburgerMenu(){
+  const menu = document.getElementById('hamburgerMenu');
+  if(!menu) return;
+  menu.innerHTML = '';
+  // Define items: label and target button id (existing controls)
+  const items = [
+    {label:'Run', id:'runBtnTop'},
+    {label:'Preview', id:'togglePreviewTop'},
+    {label:'Save', id:'saveProjectTop'},
+    {label:'Connect GitHub', id:'connectGit'},
+    {label:'Push', id:'pushGit'},
+    {label:'Install', id:'installBtn'},
+    {label:'Publish', id:'publishBtn'}
+  ];
+  items.forEach(it=>{
+    const btn = document.createElement('button');
+    btn.className = 'h-item';
+    btn.type = 'button';
+    btn.textContent = it.label;
+    btn.addEventListener('click', ()=>{
+      // trigger the existing control if present
+      const target = document.getElementById(it.id);
+      if(target){ target.click(); }
+      // close menu after action
+      menu.classList.add('hidden');
+    });
+    menu.appendChild(btn);
+  });
+}
+
+function togglePreviewPanel(){
+  const previewPanel = document.getElementById('previewPanel');
+  if(!previewPanel) return;
+  const isHidden = previewPanel.classList.toggle('hidden');
+  // On small screens, if preview is visible, make it mobile-fullscreen-friendly
+  if(window.innerWidth <= 700){
+    if(!isHidden){
+      previewPanel.classList.add('mobile-visible');
+      // hide code panel for a focused preview experience
+      const codePanel = document.querySelector('.code-panel'); if(codePanel) codePanel.style.display = 'none';
+    } else {
+      previewPanel.classList.remove('mobile-visible');
+      const codePanel = document.querySelector('.code-panel'); if(codePanel) codePanel.style.display = '';
+    }
+  }
+  // refresh CodeMirror because layout changed
+  setTimeout(()=>{ if(cm && cm.refresh) cm.refresh(); }, 140);
 }
 
 // PWA: service worker registration and install prompt handling
