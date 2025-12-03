@@ -7,16 +7,17 @@
   <!-- Google site verification (token only) -->
   <meta name="google-site-verification" content="google7d8177cdda59d81f" />
   <!-- Primary SEO meta -->
-  <meta name="description" content="QuickRedBlazer — a sleek neon-themed Web IDE by Quick Red Tech. Edit, preview and publish web projects directly in your browser. PWA-ready with GitHub integration and live preview." />
-  <meta name="keywords" content="web ide, code editor, live preview, PWA, QuickRedBlazer, Quick Red Tech, online IDE, CodeMirror, web development" />
+  <meta name="description" content="QuickRedBlazer — a sleek neon-themed Web IDE built by Quick Red Tech and owned by Chisom Life Eke. Edit, preview and publish web projects directly in your browser. PWA-ready with GitHub integration and live preview." />
+  <meta name="keywords" content="web ide, code editor, live preview, PWA, QuickRedBlazer, Quick Red Tech, Chisom Life Eke, online IDE, CodeMirror, web development" />
   <meta name="author" content="Quick Red Tech" />
+  <meta name="owner" content="Chisom Life Eke" />
   <meta name="robots" content="index, follow" />
-  <link rel="canonical" href="/" />
+  <meta name="publisher" content="Quick Red Tech" />
 
   <!-- Open Graph / Social -->
   <meta property="og:site_name" content="QuickRedBlazer" />
   <meta property="og:title" content="QuickRedBlazer — Web IDE" />
-  <meta property="og:description" content="A sleek neon-themed Web IDE by Quick Rd Tech — edit, preview and publish web projects directly in your browser." />
+  <meta property="og:description" content="QuickRedBlazer — an in-browser Web IDE built by Quick Red Tech and owned by Chisom Life Eke. Edit, preview and publish web projects quickly." />
   <meta property="og:type" content="website" />
   <link rel="canonical" href="https://qrtquick.github.io/QuickRedBlazer-Web-IDE/" />
   <meta property="og:url" content="https://qrtquick.github.io/QuickRedBlazer-Web-IDE/" />
@@ -25,7 +26,7 @@
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="QuickRedBlazer — Web IDE" />
-  <meta name="twitter:description" content="A sleek neon-themed Web IDE by Quick Rd Tech — edit, preview and publish web projects directly in your browser." />
+  <meta name="twitter:description" content="QuickRedBlazer — an in-browser Web IDE built by Quick Red Tech and owned by Chisom Life Eke. Edit, preview and publish web projects quickly." />
   <meta name="twitter:image" content="https://qrtquick.github.io/QuickRedBlazer-Web-IDE/icons/qrb-logo.svg" />
 
   <!-- Structured data: Organization and SoftwareApplication -->
@@ -35,16 +36,18 @@
     "@graph": [
       {
         "@type": "Organization",
-        "name": "Quick Rd Tech",
+        "name": "Quick Red Tech",
         "url": "https://qrtquick.github.io/QuickRedBlazer-Web-IDE/",
-        "logo": "https://qrtquick.github.io/QuickRedBlazer-Web-IDE/icons/qrb-logo.svg"
+        "logo": "https://qrtquick.github.io/QuickRedBlazer-Web-IDE/icons/qrb-logo.svg",
+        "founder": { "@type": "Person", "name": "Chisom Life Eke" }
       },
       {
         "@type": "SoftwareApplication",
         "name": "QuickRedBlazer",
         "operatingSystem": "Web",
         "applicationCategory": "DeveloperTool",
-        "author": { "@type": "Organization", "name": "Quick Rd Tech" },
+        "author": { "@type": "Organization", "name": "Quick Red Tech" },
+        "publisher": { "@type": "Organization", "name": "Quick Red Tech", "logo": "https://qrtquick.github.io/QuickRedBlazer-Web-IDE/icons/qrb-logo.svg", "founder": { "@type": "Person", "name": "Chisom Life Eke" } },
         "description": "A neon-themed in-browser Web IDE for editing and previewing web projects.",
         "url": "https://qrtquick.github.io/QuickRedBlazer-Web-IDE/",
         "image": "https://qrtquick.github.io/QuickRedBlazer-Web-IDE/icons/qrb-logo.svg"
@@ -137,8 +140,9 @@
           <div class="preview-top">
             <div class="small">Live Preview</div>
             <div class="preview-actions">
-              <button class="btn ghost" id="runBtn">Run</button>
-              <button class="btn ghost" id="openInNew">Open</button>
+                <button class="btn ghost" id="runBtn">Run</button>
+                <button class="btn ghost" id="previewBack" title="Back" aria-label="Preview back">←</button>
+                <button class="btn ghost" id="openInNew">Open</button>
             </div>
           </div>
           <iframe id="preview" class="preview-frame" sandbox="allow-scripts allow-same-origin"></iframe>
