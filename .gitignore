@@ -1,0 +1,39 @@
+# Node modules
+node_modules/
+
+# Build outputs
+dist/
+build/
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+# Ignore common large binary/media/archive files which often exceed 40MB
+# Note: a versioned pre-commit hook (scripts/check-large-files.js) blocks staged files larger than 40MB
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+*.rar
+*.7z
+*.exe
+*.msi
+*.iso
+*.dmg
+*.mp4
+*.mov
+*.mkv
+*.avi
+*.psd
+*.pdf
+
+# Ignore large artifacts
+*.sqlite
+*.db
