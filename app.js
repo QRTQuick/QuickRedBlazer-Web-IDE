@@ -38,6 +38,10 @@ const togglePreview = document.getElementById('togglePreview');
 const openInNew = document.getElementById('openInNew');
 let cm = null; // CodeMirror instance
 
+// Preview history (simple snapshot stack to support Back)
+let previewHistory = [];
+let previewHistoryIndex = -1;
+
 // Initialize
 function init(){
   files = JSON.parse(localStorage.getItem('qrb_files') || 'null') || {...defaultFiles};
@@ -141,7 +145,7 @@ function attachEvents(){
     }
   });
   togglePreview.addEventListener('click', ()=> document.getElementById('previewPanel').classList.toggle('hidden'));
-  openInNew.addEventListener('click', ()=> window.open(preview.src || '', '_blank'));
+  openInNew.addEventListener('click', openPreviewInNewTab);
   document.getElementById('fileSearch').addEventListener('input', onSearch);
 
   // Mobile nav buttons
@@ -157,6 +161,10 @@ function attachEvents(){
   if(togglePreviewTop){
     togglePreviewTop.addEventListener('click', togglePreviewPanel);
   }
+
+  // Preview Back button (navigates snapshot history)
+  const previewBackBtn = document.getElementById('previewBack');
+  if(previewBackBtn) previewBackBtn.addEventListener('click', previewBack);
 
   // Responsive hamburger menu: populate on demand when More button clicked
   const moreBtn = document.getElementById('moreBtn');
@@ -486,6 +494,8 @@ function buildPreview(){
 
 function runPreview(){
   const html = buildPreview();
+  // push snapshot to history (avoid duplicates)
+  try{ pushPreviewSnapshot(html); }catch(e){ /* ignore */ }
   // Prefer srcdoc for compatibility on many mobile browsers; fall back to blob URL if needed
   try{
     preview.removeAttribute('src');
@@ -496,6 +506,76 @@ function runPreview(){
     preview.src = url;
     setTimeout(()=> URL.revokeObjectURL(url), 2000);
   }
+}
+
+// Open the current preview in a new tab. Handles `srcdoc` by creating a temporary blob URL.
+function openPreviewInNewTab(){
+  try{
+    // If the iframe has a navigable src already (blob or remote), open that
+    if(preview.src && preview.src.trim()){
+      window.open(preview.src, '_blank');
+      return;
+    }
+
+    // If using srcdoc, create a blob from the current srcdoc content
+    if(preview.srcdoc && preview.srcdoc.trim()){
+      const blob = new Blob([preview.srcdoc], {type: 'text/html'});
+      const url = URL.createObjectURL(blob);
+      // open in new tab and revoke shortly after to allow navigation
+      window.open(url, '_blank');
+      setTimeout(()=> URL.revokeObjectURL(url), 2500);
+      return;
+    }
+
+    // Fallback: build preview HTML and open as blob
+    const html = buildPreview();
+    const blob = new Blob([html], {type: 'text/html'});
+    const url = URL.createObjectURL(blob);
+    window.open(url, '_blank');
+    setTimeout(()=> URL.revokeObjectURL(url), 2500);
+  }catch(err){
+    // last resort: open blank and write into it (may be blocked by popup blockers)
+    try{
+      const w = window.open('about:blank', '_blank');
+      if(w && w.document){ w.document.open(); w.document.write(buildPreview()); w.document.close(); }
+    }catch(e){ console.error('Failed to open preview in new tab', e); }
+  }
+}
+
+// Push a preview snapshot onto the history stack
+function pushPreviewSnapshot(html){
+  // if current index points to same content, do nothing
+  if(previewHistoryIndex >= 0 && previewHistory[previewHistoryIndex] === html) return;
+  // truncate any forward history
+  previewHistory = previewHistory.slice(0, previewHistoryIndex + 1);
+  previewHistory.push(html);
+  previewHistoryIndex = previewHistory.length - 1;
+  updateBackBtnState();
+}
+
+function updateBackBtnState(){
+  const btn = document.getElementById('previewBack');
+  if(!btn) return;
+  const canGoBack = previewHistoryIndex > 0;
+  btn.disabled = !canGoBack;
+  if(canGoBack) btn.classList.remove('disabled'); else btn.classList.add('disabled');
+}
+
+// Navigate back to previous preview snapshot
+function previewBack(){
+  if(previewHistoryIndex <= 0) return;
+  previewHistoryIndex--;
+  const html = previewHistory[previewHistoryIndex] || '<!doctype html><html><body></body></html>';
+  try{
+    preview.removeAttribute('src');
+    preview.srcdoc = html;
+  }catch(e){
+    const blob = new Blob([html], {type:'text/html'});
+    const url = URL.createObjectURL(blob);
+    preview.src = url;
+    setTimeout(()=> URL.revokeObjectURL(url), 2000);
+  }
+  updateBackBtnState();
 }
 
 function showPanel(name){
