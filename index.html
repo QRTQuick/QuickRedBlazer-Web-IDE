@@ -69,6 +69,9 @@
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#071018">
 
+  <!-- Longer visible description meta to assist crawlers and Google AI -->
+  <meta name="description:long" content="QuickRedBlazer is an in-browser Web IDE for rapid prototyping: syntax-highlighted editor, file tree, live preview with snapshot history, PWA install, mobile UX, and GitHub publish flows (PAT and server OAuth)." />
+
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 
@@ -77,28 +80,57 @@
   <!-- CodeMirror (syntax highlighting for editor) -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css" integrity="sha512-EoQzGuq2y+Yx2QH2sX3cREf1o2Z2d2bP4eQq1m3cG3kGvV0uH8x/1G6oZq5k6p6v9mV6GfQ2a7J2bQ1zLk9W2g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/dracula.min.css" integrity="sha512-RcH7y9u+1c3hZz3I7s/0Zk1p8u6b4a2q9l7f0e3m6n5p4v3s2t1u0w9x8y7z6a5b4c3d2e1f0g9h8i7j6k5l4==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-</head>
-<body>
-  <div class="app">
-    <aside class="sidebar" id="sidebar">
-      <div class="brand">
-        <div class="logo" aria-hidden>
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect x="1" y="1" width="22" height="22" rx="5" fill="url(#g)" />
-            <defs>
-              <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0" stop-color="#ff3b3b" />
-                <stop offset="0.5" stop-color="#b14bff" />
-                <stop offset="1" stop-color="#28b4ff" />
-              </linearGradient>
-            </defs>
-            <text x="50%" y="58%" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" font-weight="700" fill="#031018">QR</text>
-          </svg>
-        </div>
-        <div class="brand-text">
-          <div class="title">QuickRedBlazer</div>
-          <div class="subtitle">Quick Red Tech Web IDE</div>
-        </div>
+      {
+        "@type": "SoftwareApplication",
+        "name": "QuickRedBlazer",
+        "headline": "QuickRedBlazer — In-Browser Web IDE for Rapid Prototyping",
+        "mainEntityOfPage": {
+          "@type": "WebPage",
+          "@id": "https://qrtquick.github.io/QuickRedBlazer-Web-IDE/"
+        },
+        "operatingSystem": "Web",
+        "applicationCategory": "DeveloperTool",
+        "author": { "@type": "Organization", "name": "Quick Red Tech" },
+        "publisher": { "@type": "Organization", "name": "Quick Red Tech", "logo": "https://qrtquick.github.io/QuickRedBlazer-Web-IDE/icons/qrb-logo.svg", "founder": { "@type": "Person", "name": "Chisom Life Eke" } },
+        "creator": { "@type": "Person", "name": "Chisom Life Eke" },
+        "keywords": "web ide, code editor, live preview, PWA, GitHub integration, CodeMirror, QuickRedBlazer, preview snapshots",
+        "description": "QuickRedBlazer is a compact, neon-styled in-browser Web IDE optimized for fast prototyping and learning. It provides a syntax-highlighted editor (CodeMirror), an intuitive file tree and tabs, live preview with snapshot history, mobile-friendly controls, PWA installability, and integrated GitHub publish flows (PAT convenience flow and server-side OAuth single-commit push). The preview injects CSS into the document head and appends JS before closing body, enabling easy testing of static sites and small web apps directly in the browser.",
+        "featureList": [
+          "Syntax highlighting (CodeMirror)",
+          "File tree, tabs, and local persistence (localStorage)",
+          "Live preview with srcdoc/blob fallback and snapshot history",
+          "Open preview in new tab (blob-based when needed)",
+          "PWA support (manifest + service worker)",
+          "GitHub integration: PAT quick flow and server OAuth single-commit push",
+          "Mobile-friendly UI and accessibility-minded modals"
+        ],
+        "url": "https://qrtquick.github.io/QuickRedBlazer-Web-IDE/",
+        "image": "https://qrtquick.github.io/QuickRedBlazer-Web-IDE/icons/qrb-logo.svg",
+        "sameAs": [
+          "https://github.com/QRTQuick/QuickRedBlazer-Web-IDE",
+          "https://github.com/QRTQuick"
+        ]
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What is QuickRedBlazer?",
+            "acceptedAnswer": { "@type": "Answer", "text": "QuickRedBlazer is an in-browser Web IDE for editing, previewing and publishing small web projects. It includes a syntax-highlighted editor, file tree, live preview with snapshots, PWA support, and GitHub integration." }
+          },
+          {
+            "@type": "Question",
+            "name": "How do I publish from the IDE?",
+            "acceptedAnswer": { "@type": "Answer", "text": "You can push using a Personal Access Token for quick local use, or run the helper server in the `server/` folder for a secure OAuth-based single-commit push to GitHub." }
+          },
+          {
+            "@type": "Question",
+            "name": "Is my code stored remotely?",
+            "acceptedAnswer": { "@type": "Answer", "text": "No — files are stored in your browser's localStorage by default. If you push to GitHub or use the server helper, files are uploaded to the repository you specify." }
+          }
+        ]
+      }
       </div>
 
       <div class="search">
